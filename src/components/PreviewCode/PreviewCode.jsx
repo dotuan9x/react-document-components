@@ -2,14 +2,13 @@
 import React, {useState, useRef} from 'react';
 import {Row, Tooltip, Tabs} from 'antd';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 
 // Components
 import Highlighter from 'Src/components/Highlighter';
 
 // Icons
 import {CopyOutlined, CheckOutlined} from '@ant-design/icons';
-import ShowCode from 'Src/assets/Icon/expand-icon-show.svg';
-import HideCode from 'Src/assets/Icon/expand-icon-hide.svg';
 
 // Styles
 import styles from './styles.module.less';
@@ -72,12 +71,12 @@ function PreviewCode(props) {
                         {isCopy ? <CheckOutlined style={{color: '#52c41a'}} className={styles['expand-icon']} /> : <CopyOutlined onClick={onClickCopy} className={styles['expand-icon']} />}
                     </Tooltip>
                     <Tooltip title={isShowCode ? 'Hide code' : 'Show code'}>
-                        <img 
+                        <i
                             onClick={onClickExpandCode} 
-                            className={styles['expand-icon']} 
-                            alt="expand code" 
-                            src={isShowCode ? HideCode : ShowCode}  
-                            width='16px' 
+                            className={classnames(styles['expand-icon'], isShowCode ? 'icon-document-expand-icon-hide' : 'icon-document-expand-icon-show')} 
+                            // alt="expand code" 
+                            // src={isShowCode ? HideCode : ShowCode}  
+                            // width='16px' 
                         />
                     </Tooltip>
                 </div>
