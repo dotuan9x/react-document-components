@@ -15,7 +15,6 @@ import DefaultContent from 'Modules/Layouts/Components/DefaultContent';
 
 // Assets
 import 'Assets/css/styles.less';
-import 'Assets/css/icons.less';
 import 'antd/dist/antd.css';
 
 import {LayoutContext} from './layoutContext';

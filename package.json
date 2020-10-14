@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "@ant-design/icons": "^4.0.0",
-    "@antscorp/components": "0.0.150-beta.11",
+    "@antscorp/components": "0.0.151-beta.22",
     "@babel/polyfill": "^7.8.7",
     "antd": "^4.3.3",
     "axios": "^0.19.2",

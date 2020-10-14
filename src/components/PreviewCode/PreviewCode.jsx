@@ -2,7 +2,6 @@
 import React, {useState, useRef} from 'react';
 import {Row, Tooltip, Tabs} from 'antd';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
 
 // Components
 import Highlighter from 'Src/components/Highlighter';
@@ -72,11 +71,8 @@ function PreviewCode(props) {
                     </Tooltip>
                     <Tooltip title={isShowCode ? 'Hide code' : 'Show code'}>
                         <i
-                            onClick={onClickExpandCode} 
-                            className={classnames(styles['expand-icon'], isShowCode ? 'icon-document-expand-icon-hide' : 'icon-document-expand-icon-show')} 
-                            // alt="expand code" 
-                            // src={isShowCode ? HideCode : ShowCode}  
-                            // width='16px' 
+                            onClick={onClickExpandCode}
+                            className={`${styles['expand-icon']} ${isShowCode ? 'icon-ants-expand-icon-hide' : 'icon-ants-expand-icon-show'}`} 
                         />
                     </Tooltip>
                 </div>
