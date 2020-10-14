@@ -1,0 +1,35 @@
+{
+  "name": "@antscorp/document",
+  "version": "0.0.8",
+  "description": "React document",
+  "main": "main.js",
+  "author": "dotuan9x",
+  "license": "ISC",
+  "dependencies": {
+    "@ant-design/icons": "^4.0.0",
+    "@antscorp/components": "0.0.150-beta.11",
+    "@babel/polyfill": "^7.8.7",
+    "antd": "^4.3.3",
+    "axios": "^0.19.2",
+    "classnames": "^2.2.6",
+    "highlight.js": "^10.0.3",
+    "html-to-jsonml": "0.0.6",
+    "jsonml-to-react-element": "^1.1.11",
+    "marked": "^0.8.0",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "react-redux": "7.1.3",
+    "react-router": "5.1.2",
+    "react-router-dom": "5.1.2",
+    "redux": "4.0.4",
+    "redux-saga": "^1.1.3"
+  },
+  "scripts": {
+    "start": "webpack-dev-server --mode development --open",
+    "build": "webpack --config webpack.build.js"
+  },
+  "peerDependencies": {
+    "react": ">=16.9.0",
+    "react-dom": ">=16.9.0"
+  }
+}
