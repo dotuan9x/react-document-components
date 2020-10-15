@@ -27,10 +27,15 @@ const DefaultSideBar = (props) => {
                 let arrMenus = [];
 
                 properties.menus.map((menu) => {
+                    console.log('DefaultSideBar -> menu', menu);
                     if (menu.name && menu.label) {
                         let arrChildren = [];
 
+                        setOpenKeys([menu.name]);
+
                         if (menu.components) {
+                            setSelectKeys([menu.components[0].name]);
+
                             menu.components.map((component) => {
                                 if (component.name && component.label) {
                                     arrChildren.push({
@@ -97,9 +102,6 @@ const DefaultSideBar = (props) => {
             return (
                 <Menu.Item
                     key={name}
-                    style={{
-                        backgroundColor: '#1890ff'
-                    }}
                 >
                     <Row type={'flex'} align={'middle'}>
                         {icon}
@@ -114,6 +116,12 @@ const DefaultSideBar = (props) => {
 
     const {Sider} = Layout;
     const {collapsed} = props;
+
+    const onClickItem = (value) => {
+
+        typeof props.onClickItem === 'function' &&  props.onClickItem(value);
+
+    };
 
     return (
         <Sider
@@ -138,8 +146,9 @@ const DefaultSideBar = (props) => {
                 className={classnames({'text-center': collapsed}, {'text-left': !collapsed})}
                 theme={'dark'}
                 style={{width: '100%'}}
-                defaultSelectedKeys={selectedKeys}
-                defaultOpenKeys={openKeys}
+                onClick={onClickItem}
+                defaultSelectedKeys={['calendar']}
+                defaultOpenKeys={['components']}
             >
                 {renderMenu(menuDataOptions)}
             </Menu>

@@ -40,8 +40,6 @@ class Layouts extends Component {
                             menu.components.map((component) => {
                                 if (component.name && component.label) {
                                     // First component
-                                    console.log('component 1111', component);
-                                    console.log('selectedComponent 1111', selectedComponent);
                                     if (!selectedComponent.name || component.active) {
                                         selectedComponent = component;
                                     }
@@ -50,8 +48,6 @@ class Layouts extends Component {
                         }
                     }
                 });
-
-                console.log('selectedComponent', selectedComponent);
 
                 if (selectedComponent.name) {
                     this.setState({
@@ -67,6 +63,26 @@ class Layouts extends Component {
         }
     }
 
+     onClickItem = (value) => {
+         const {key = ''} = value;
+
+         let selectedComponent = {};
+
+         this.props.menus && this.props.menus.map(menu => {
+             if (menu.name && menu.label) {
+                 menu.components.map(component => {
+                     if (component.name === key) {
+                         selectedComponent = component;
+                     }
+                 });
+             }
+         });
+
+         this.setState({
+             component: selectedComponent
+         });
+     }
+
     toggle = () => {
         this.setState({
             collapsed: !this.state.collapsed
@@ -74,12 +90,11 @@ class Layouts extends Component {
     };
 
     render() {
-        console.log('this.state.component', this.state.component);
         return (
             <React.Fragment>
                 <LayoutContext.Provider value={this.props}>
                     <Layout style={{minHeight: '100vh'}}>
-                        <DefaultSideBar collapsed={this.state.collapsed} />
+                        <DefaultSideBar collapsed={this.state.collapsed} onClickItem={this.onClickItem} />
                         <Layout className="site-layout">
                             <Header className="site-layout-background" style={{padding: 0}}>
                                 {React.createElement(this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
@@ -109,6 +124,7 @@ Layouts.defaultProps = {
                 {
                     name: 'calendar',
                     label: 'Calendar',
+                    active: true,
                     description: 'Tạo ra một danh sách range date cho phép người dùng chọn và cho phép chọn thời gian so sánh',
                     spanColExample: 12,
                     whenToUse: () => require('Components/Calendar/Docs/when-to-use.md'),
@@ -175,6 +191,22 @@ Layouts.defaultProps = {
                             })
                         }
 
+                    ]
+                },
+                {
+                    name: 'icon',
+                    label: 'Icons',
+                    spanColExample: 24,
+                    description: () => require('Components/Icon/Docs/description.md'),
+                    whenToUse: () => require('Components/Icon/Docs/when-to-use.md'),
+                    examples: [
+                        {
+                            markdown: () => require('Components/Icon/Previews/basic.md'),
+                            path: Loadable({
+                                loader: () => import('Components/Icon/Previews/basic.jsx'),
+                                loading: () => {return null}
+                            })
+                        }
                     ]
                 }
             ]
