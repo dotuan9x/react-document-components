@@ -54,12 +54,16 @@ class Components extends Component {
         }
     }
 
-    componentDidUpdate(prevProps) {
+    componentDidUpdate(prevProps, prevState) {
         try {
             this.updateCodeSyntaxHighlighting();
 
             // Update component
             if (!this.state.name || this.state.name !== this.props.component.name) {
+                this.state.isShowLoading === false && this.setState({
+                    isShowLoading: true
+                });
+
                 this.getComponent(this.props.component).then(component => {
                     this.setState({
                         name: this.props.component.name,

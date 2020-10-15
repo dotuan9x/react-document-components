@@ -15,10 +15,6 @@ import styles from './styles.module.less';
 
 const DefaultSideBar = (props) => {
     const properties = useContext(LayoutContext);
-
-    const [selectedKeys, setSelectKeys] = useState([]);
-    const [openKeys, setOpenKeys] = useState([]);
-
     const [menuDataOptions, setMenuDataOptions] = useState([]);
 
     useEffect(() => {
@@ -27,15 +23,10 @@ const DefaultSideBar = (props) => {
                 let arrMenus = [];
 
                 properties.menus.map((menu) => {
-                    console.log('DefaultSideBar -> menu', menu);
                     if (menu.name && menu.label) {
                         let arrChildren = [];
 
-                        setOpenKeys([menu.name]);
-
                         if (menu.components) {
-                            setSelectKeys([menu.components[0].name]);
-
                             menu.components.map((component) => {
                                 if (component.name && component.label) {
                                     arrChildren.push({
@@ -61,7 +52,7 @@ const DefaultSideBar = (props) => {
                 }
             }
         } catch (error) {
-            console.log('error', error);
+            //
         }
     }, [properties]);
 
@@ -147,13 +138,18 @@ const DefaultSideBar = (props) => {
                 theme={'dark'}
                 style={{width: '100%'}}
                 onClick={onClickItem}
-                defaultSelectedKeys={['calendar']}
-                defaultOpenKeys={['components']}
+                defaultSelectedKeys={props.defaultSelectedKeys}
+                defaultOpenKeys={props.defaultOpenKeys}
             >
                 {renderMenu(menuDataOptions)}
             </Menu>
         </Sider>
     );
+};
+
+DefaultSideBar.defaultProps = {
+    defaultSelectedKeys: [],
+    defaultOpenKeys: []
 };
 
 export default DefaultSideBar;

@@ -78,9 +78,11 @@ class Layouts extends Component {
              }
          });
 
-         this.setState({
-             component: selectedComponent
-         });
+         setTimeout(() => {
+             this.setState({
+                 component: selectedComponent
+             });
+         }, 300);
      }
 
     toggle = () => {
@@ -90,11 +92,14 @@ class Layouts extends Component {
     };
 
     render() {
+        // Props
+        const {sidebar = {}} = this.props;
+
         return (
             <React.Fragment>
                 <LayoutContext.Provider value={this.props}>
                     <Layout style={{minHeight: '100vh'}}>
-                        <DefaultSideBar collapsed={this.state.collapsed} onClickItem={this.onClickItem} />
+                        <DefaultSideBar collapsed={this.state.collapsed} defaultOpenKeys={sidebar.defaultOpenKeys} defaultSelectedKeys={sidebar.defaultSelectedKeys} onClickItem={this.onClickItem} />
                         <Layout className="site-layout">
                             <Header className="site-layout-background" style={{padding: 0}}>
                                 {React.createElement(this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
@@ -115,6 +120,10 @@ class Layouts extends Component {
 }
 
 Layouts.defaultProps = {
+    sidebar: {
+        defaultSelectedKeys: 'icon',
+        defaultOpenKeys: 'components'
+    },
     menus: [
         {
             'name': 'components',
@@ -122,9 +131,25 @@ Layouts.defaultProps = {
             'icon': <FileDoneOutlined />,
             'components': [
                 {
+                    name: 'icon',
+                    label: 'Icons',
+                    spanColExample: 24,
+                    active: true,
+                    description: () => require('Components/Icon/Docs/description.md'),
+                    whenToUse: () => require('Components/Icon/Docs/when-to-use.md'),
+                    examples: [
+                        {
+                            markdown: () => require('Components/Icon/Previews/basic.md'),
+                            path: Loadable({
+                                loader: () => import('Components/Icon/Previews/basic.jsx'),
+                                loading: () => {return null}
+                            })
+                        }
+                    ]
+                },
+                {
                     name: 'calendar',
                     label: 'Calendar',
-                    active: true,
                     description: 'Tạo ra một danh sách range date cho phép người dùng chọn và cho phép chọn thời gian so sánh',
                     spanColExample: 12,
                     whenToUse: () => require('Components/Calendar/Docs/when-to-use.md'),
@@ -191,22 +216,6 @@ Layouts.defaultProps = {
                             })
                         }
 
-                    ]
-                },
-                {
-                    name: 'icon',
-                    label: 'Icons',
-                    spanColExample: 24,
-                    description: () => require('Components/Icon/Docs/description.md'),
-                    whenToUse: () => require('Components/Icon/Docs/when-to-use.md'),
-                    examples: [
-                        {
-                            markdown: () => require('Components/Icon/Previews/basic.md'),
-                            path: Loadable({
-                                loader: () => import('Components/Icon/Previews/basic.jsx'),
-                                loading: () => {return null}
-                            })
-                        }
                     ]
                 }
             ]
