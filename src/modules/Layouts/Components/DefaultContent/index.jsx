@@ -54,7 +54,7 @@ class Components extends Component {
         }
     }
 
-    componentDidUpdate(prevProps, prevState) {
+    componentDidUpdate() {
         try {
             this.updateCodeSyntaxHighlighting();
 
@@ -72,19 +72,6 @@ class Components extends Component {
                     });
                 });
             }
-
-            /* if (getObjectPropSafely(() => this.props.match.params.name !== prevProps.match.params.name)) {
-                this.setState({
-                    isShowLoading: true
-                });
-
-                this.getComponent(this.props.match.params.name).then(component => {
-                    this.setState({
-                        component,
-                        isShowLoading: false
-                    });
-                });
-            } */
         } catch (error) {
             // Error
         }
@@ -237,7 +224,7 @@ class Components extends Component {
 
                 result = {
                     ...result,
-                    title: component.title || 'Component title',
+                    title: component.label || 'Component title',
                     description: typeof component.description !== 'function' ? component.description || 'This is description of component' : description,
                     spanColExample: component.spanColExample || 24,
                     whenToUse,
@@ -310,15 +297,17 @@ class Components extends Component {
     }
 
     render() {
+        const {title} = this.state.component;
+
         return (
             <React.Fragment>
                 <Breadcrumb style={{margin: '16px 0'}}>
-                    <Breadcrumb.Item>User</Breadcrumb.Item>
-                    <Breadcrumb.Item>Bill</Breadcrumb.Item>
+                    <Breadcrumb.Item>Components</Breadcrumb.Item>
+                    <Breadcrumb.Item>{title}</Breadcrumb.Item>
                 </Breadcrumb>
                 <div className="site-layout-background markdown" style={{padding: 24, minHeight: 360}}>
                     <Spin spinning={this.state.isShowLoading}>
-                        <h1>{this.state.component && this.state.component.title ? this.state.component.title : ''}</h1>
+                        <h1>{title}</h1>
                         {
                             this.state.component && this.state.component.description ? typeof this.state.component.description !== 'string' ?
                                 <div className='description-mark-down'>{toReactElement(this.state.component.description)}</div> : <p>{this.state.component.description}</p> : null
