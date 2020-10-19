@@ -325,7 +325,7 @@ class Components extends Component {
                         {
                             this.state.component && this.state.component.property ? (
                                 <>
-                                    <h2>API</h2>
+                                    <h2>Property</h2>
                                     <Row style={{width: '100%'}}>
                                         <Col span={24}>
                                             {this.state.component && this.state.component.property ? toReactElement(this.state.component.property) : null}

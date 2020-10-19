@@ -2,14 +2,24 @@
   width: 100%;
   color: rgba(0,0,0,.85);
   border: 1px solid #f0f0f0;
+  overflow: hidden;
   .preview {
     padding: 42px 24px 50px;
     color: rgba(0,0,0,.85);
+    overflow: auto;
   }
   .markdown {
     padding: 20px 24px 50px;
     img {
       max-width: 100%;
     }
+  }
+}
+.ant-divider-horizontal.ant-divider-with-text {
+  &:before {
+    color: #f0f0f0;
+  }
+  &:after {
+    color: #f0f0f0;
   }
 }
