@@ -117,6 +117,7 @@ const DefaultSideBar = (props) => {
     return (
         <Sider
             className="site-layout-background"
+            theme={'light'}
             trigger={null}
             collapsible
             collapsed={collapsed}
@@ -135,7 +136,7 @@ const DefaultSideBar = (props) => {
             <Menu
                 mode={'inline'}
                 className={classnames({'text-center': collapsed}, {'text-left': !collapsed})}
-                theme={'dark'}
+                theme={'light'}
                 style={{width: '100%'}}
                 onClick={onClickItem}
                 defaultSelectedKeys={props.defaultSelectedKeys}
