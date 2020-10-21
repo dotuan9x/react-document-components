@@ -150,9 +150,9 @@ const DefaultSideBar = (props) => {
             </div>
             <Menu
                 mode={'inline'}
-                className={classnames({'text-center': collapsed}, {'text-left': !collapsed})}
+                className={classnames({'text-center': collapsed}, {'text-left': !collapsed}, styles['menu-sidebar'])}
                 theme={'light'}
-                style={{width: '100%', position: 'sticky', top: 0}}
+                style={{width: '100%'}}
                 onClick={onClickItem}
                 selectedKeys={keyComponentSelected}
                 defaultSelectedKeys={props.defaultSelectedKeys}
