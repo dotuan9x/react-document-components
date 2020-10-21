@@ -121,8 +121,8 @@ class Layouts extends Component {
 
 Layouts.defaultProps = {
     sidebar: {
-        defaultSelectedKeys: 'icon',
-        defaultOpenKeys: 'components'
+        defaultSelectedKeys: ['icon'],
+        defaultOpenKeys: ['components']
     },
     menus: [
         {
