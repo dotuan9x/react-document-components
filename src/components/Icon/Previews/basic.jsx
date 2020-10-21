@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 // Icons
 import {Icon} from '@antscorp/components';
-import '@antscorp/components/main.css';
+// import '@antscorp/components/main.css';
 
 const icons = ['icon-ants-delete', 'icon-ants-send', 'icon-ants-leapfrogging', 'icon-ants-note', 'icon-ants-trigger', 'icon-ants-enrol', 'icon-ants-diagram',
     'icon-ants-delay', 'icon-ants-flag', 'icon-ants-add-square', 'icon-ants-minus-square', 'icon-ants-invisible', 'icon-ants-caret-left', 'icon-ants-caret-right',

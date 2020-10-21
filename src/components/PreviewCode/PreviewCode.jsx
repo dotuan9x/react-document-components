@@ -72,7 +72,7 @@ function PreviewCode(props) {
                     <Tooltip title={isShowCode ? 'Hide code' : 'Show code'}>
                         <i
                             onClick={onClickExpandCode}
-                            className={`${styles['expand-icon']} ${isShowCode ? 'icon-ants-expand-icon-hide' : 'icon-ants-expand-icon-show'}`} 
+                            className={`${styles['expand-icon']} ${isShowCode ? 'icon-document-expand-icon-hide' : 'icon-document-expand-icon-show'}`} 
                         />
                     </Tooltip>
                 </div>

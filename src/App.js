@@ -3,6 +3,8 @@ import {HashRouter as Router, Switch, Route} from 'react-router-dom';
 
 import ExampleLayouts from 'Modules/Layouts/Example';
 
+import '@antscorp/components/main.css';
+
 class App extends Component {
     render() {
         return (

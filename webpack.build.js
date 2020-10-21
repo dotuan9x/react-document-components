@@ -16,7 +16,9 @@ module.exports = {
             Src: path.resolve(__dirname, 'src/'),
             Assets: path.resolve(__dirname, 'src/assets/'),
             Components: path.resolve(__dirname, 'src/components/'),
-            Modules: path.resolve(__dirname, 'src/modules/')
+            Modules: path.resolve(__dirname, 'src/modules/'),
+            Services: paths.appSrc + '/services/',
+            Application: paths.applicationSrc
         }
     },
     externals: {
@@ -54,21 +56,9 @@ module.exports = {
                 test: /\.less$/,
                 exclude: /\.module.(less)$/,
                 use: [
-                    {
-                        loader: 'style-loader'
-                    },
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            sourceMap: true
-                        }
-                    },
-                    {
-                        loader: 'less-loader',
-                        options: {
-                            sourceMap: true
-                        }
-                    }
+                    MiniCssExtractPlugin.loader,
+                    'css-loader',
+                    'less-loader'
                 ]
             },
             {

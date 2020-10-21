@@ -18,7 +18,7 @@ import {random} from 'Src/utils';
 // Assets
 import 'highlight.js/styles/tomorrow.css';
 import './style.less';
-import '@antscorp/components/main.css';
+// import '@antscorp/components/main.css';
 
 class Components extends Component {
     static contextType = LayoutContext;
