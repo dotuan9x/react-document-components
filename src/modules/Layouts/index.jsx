@@ -23,7 +23,8 @@ class Layouts extends Component {
         super(props);
         this.state = {
             collapsed: false,
-            component: {}
+            component: {},
+            keyComponentSelected: ''
         };
     }
 
@@ -38,19 +39,28 @@ class Layouts extends Component {
                         if (menu.components) {
                             menu.components.map((component) => {
                                 if (component.name && component.label) {
+                                    if (component.child && component.child.length) {
+                                        component.child.map(childComponent => {
+                                            // First component
+                                            if (!selectedComponent.name || childComponent.active) {
+                                                selectedComponent = childComponent;
+                                            }
+                                        });
+                                    }
                                     // First component
                                     if (!selectedComponent.name || component.active) {
                                         selectedComponent = component;
                                     }
                                 }
                             });
-                        }
+                        } 
                     }
                 });
 
                 if (selectedComponent.name) {
                     this.setState({
-                        component: selectedComponent
+                        component: selectedComponent,
+                        keyComponentSelected: selectedComponent.name
                     });
                 }
             }
@@ -62,26 +72,52 @@ class Layouts extends Component {
         }
     }
 
-     onClickItem = (value) => {
-         const {key = ''} = value;
+    componentDidUpdate(prevProps, prevState) {
+        try {
+            if (this.state.keyComponentSelected !== prevState.keyComponentSelected) {
+                this.onChangeComponent(this.state.keyComponentSelected);
+            }
+        } catch (error) {
+            if (this.props.onError && typeof this.props.onError === 'function') {
+                this.props.onError(error);
+            }
+        }
+    }
 
+     onChangeComponent = (key) => {
          let selectedComponent = {};
 
-         this.props.menus && this.props.menus.map(menu => {
-             if (menu.name && menu.label) {
-                 menu.components.map(component => {
-                     if (component.name === key) {
-                         selectedComponent = component;
-                     }
-                 });
-             }
-         });
+         if (key === 'over-view') {
+             selectedComponent = {
+                 name: 'over-view',
+                 label: 'Components Overview',
+                 description: 'We provides plenty of UI components to enrich your web applications, and we will improve components experience consistently. We also recommand some great Third-Party Libraries additionally.'
+             };
 
-         setTimeout(() => {
-             this.setState({
-                 component: selectedComponent
+         } else {
+             this.props.menus && this.props.menus.map(menu => {
+                 if (menu.name && menu.label) {
+                     menu.components.map(component => {
+                         if (component.child && component.child.length) {
+                             component.child.map(childComponent => {
+                                 if (childComponent.name === key) {
+                                     selectedComponent = childComponent;
+                                 }
+                             });
+                         }
+                         if (component.name === key) {
+                             selectedComponent = component;
+                         }
+                     });
+                 }
              });
-         }, 300);
+         }
+
+         //  setTimeout(() => {
+         this.setState({
+             component: selectedComponent
+         });
+         //  }, 200);
      }
 
     toggle = () => {
@@ -90,15 +126,33 @@ class Layouts extends Component {
         });
     };
 
+    setComponentSelected = (key) => {
+        try {
+            this.setState({
+                keyComponentSelected: key
+            });
+        } catch (error) {
+            if (this.props.onError && typeof this.props.onError === 'function') {
+                this.props.onError(error);
+            }
+        }
+    }
+
     render() {
         // Props
         const {sidebar = {}} = this.props;
 
         return (
             <React.Fragment>
-                <LayoutContext.Provider value={this.props}>
+                <LayoutContext.Provider 
+                    value={{state: {layout: this.props, keyComponentSelected: this.state.keyComponentSelected}, setComponentSelected: this.setComponentSelected}}
+                >
                     <Layout style={{minHeight: '100vh'}}>
-                        <DefaultSideBar collapsed={this.state.collapsed} defaultOpenKeys={sidebar.defaultOpenKeys} defaultSelectedKeys={sidebar.defaultSelectedKeys} onClickItem={this.onClickItem} />
+                        <DefaultSideBar
+                            collapsed={this.state.collapsed} 
+                            defaultOpenKeys={sidebar.defaultOpenKeys} 
+                            defaultSelectedKeys={sidebar.defaultSelectedKeys} 
+                        />
                         <Layout className="site-layout">
                             <Header className="site-layout-background" style={{padding: 0}}>
                                 {React.createElement(this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
@@ -130,91 +184,99 @@ Layouts.defaultProps = {
             'icon': <FileDoneOutlined />,
             'components': [
                 {
-                    name: 'icon',
-                    label: 'Icons',
-                    spanColExample: 24,
-                    active: true,
-                    description: () => require('Components/Icon/Docs/description.md'),
-                    whenToUse: () => require('Components/Icon/Docs/when-to-use.md'),
-                    examples: [
+                    name: 'general',
+                    label: 'General',
+                    child: [
                         {
-                            markdown: () => require('Components/Icon/Previews/basic.md'),
-                            path: Loadable({
-                                loader: () => import('Components/Icon/Previews/basic.jsx'),
-                                loading: () => {return null}
-                            })
+                            name: 'icon',
+                            label: 'Icons',
+                            spanColExample: 24,
+                            active: true,
+                            image: 'https://gw.alipayobjects.com/zos/alicdn/rrwbSt3FQ/Icon.svg',
+                            description: () => require('Components/Icon/Docs/description.md'),
+                            whenToUse: () => require('Components/Icon/Docs/when-to-use.md'),
+                            examples: [
+                                {
+                                    markdown: () => require('Components/Icon/Previews/basic.md'),
+                                    path: Loadable({
+                                        loader: () => import('Components/Icon/Previews/basic.jsx'),
+                                        loading: () => {return null}
+                                    })
+                                }
+                            ]
+                        },
+                        {
+                            name: 'calendar',
+                            label: 'Calendar',
+                            image: 'https://www.upsieutoc.com/images/2020/10/21/Screenshot-from-2020-10-21-18-17-39.png',
+                            description: 'Tạo ra một danh sách range date cho phép người dùng chọn và cho phép chọn thời gian so sánh',
+                            spanColExample: 12,
+                            whenToUse: () => require('Components/Calendar/Docs/when-to-use.md'),
+                            property: () => require('Components/Calendar/Docs/property.md'),
+                            examples: [
+                                {
+                                    title: 'Basic usage',
+                                    col: 0,
+                                    markdown: () => require('Components/Calendar/Previews/Basic/descripition.md'),
+                                    previewCode: () => require('Components/Calendar/Previews/Basic/basic.md'),
+                                    path: Loadable({
+                                        loader: () => import('Components/Calendar/Previews/Basic/Basic.jsx'),
+                                        loading: () => {return null}
+                                    })
+                                },
+                                {
+                                    title: 'Default rangeKey',
+                                    col: 1,
+                                    markdown: () => require('Components/Calendar/Previews/DefaultRangeKey/descripition.md'),
+                                    previewCode: () => require('Components/Calendar/Previews/DefaultRangeKey/default-range-key.md'),
+                                    path: Loadable({
+                                        loader: () => import('Components/Calendar/Previews/DefaultRangeKey/DefaultRangeKey.jsx'),
+                                        loading: () => {return null}
+                                    })
+                                },
+                                {
+                                    title: 'Default compareKey',
+                                    col: 0,
+                                    markdown: () => require('Components/Calendar/Previews/DefaultCompareKey/descripition.md'),
+                                    previewCode: () => require('Components/Calendar/Previews/DefaultCompareKey/default-compare-key.md'),
+                                    path: Loadable({
+                                        loader: () => import('Components/Calendar/Previews/DefaultCompareKey/DefaultCompareKey.jsx'),
+                                        loading: () => {return null}
+                                    })
+                                },
+                                {
+                                    title: 'onApply',
+                                    col: 1,
+                                    markdown: () => require('Components/Calendar/Previews/Apply/descripition.md'),
+                                    previewCode: () => require('Components/Calendar/Previews/Apply/onApply.md'),
+                                    path: Loadable({
+                                        loader: () => import('Components/Calendar/Previews/Apply/Apply.jsx'),
+                                        loading: () => {return null}
+                                    })
+                                },
+                                {
+                                    title: 'Customize style',
+                                    col: 0,
+                                    markdown: () => require('Components/Calendar/Previews/Custom/descripition.md'),
+                                    previewCode: () => require('Components/Calendar/Previews/Custom/Custom.md'),
+                                    path: Loadable({
+                                        loader: () => import('Components/Calendar/Previews/Custom/Custom.jsx'),
+                                        loading: () => {return null}
+                                    })
+                                },
+                                {
+                                    title: 'onChange',
+                                    col: 1,
+                                    markdown: () => require('Components/Calendar/Previews/OnChange/descripition.md'),
+                                    previewCode: () => require('Components/Calendar/Previews/OnChange/onchange.md'),
+                                    path: Loadable({
+                                        loader: () => import('Components/Calendar/Previews/OnChange/OnChange.jsx'),
+                                        loading: () => {return null}
+                                    })
+                                }
+        
+                            ]
                         }
-                    ]
-                },
-                {
-                    name: 'calendar',
-                    label: 'Calendar',
-                    description: 'Tạo ra một danh sách range date cho phép người dùng chọn và cho phép chọn thời gian so sánh',
-                    spanColExample: 12,
-                    whenToUse: () => require('Components/Calendar/Docs/when-to-use.md'),
-                    property: () => require('Components/Calendar/Docs/property.md'),
-                    examples: [
-                        {
-                            title: 'Basic usage',
-                            col: 0,
-                            markdown: () => require('Components/Calendar/Previews/Basic/descripition.md'),
-                            previewCode: () => require('Components/Calendar/Previews/Basic/basic.md'),
-                            path: Loadable({
-                                loader: () => import('Components/Calendar/Previews/Basic/Basic.jsx'),
-                                loading: () => {return null}
-                            })
-                        },
-                        {
-                            title: 'Default rangeKey',
-                            col: 1,
-                            markdown: () => require('Components/Calendar/Previews/DefaultRangeKey/descripition.md'),
-                            previewCode: () => require('Components/Calendar/Previews/DefaultRangeKey/default-range-key.md'),
-                            path: Loadable({
-                                loader: () => import('Components/Calendar/Previews/DefaultRangeKey/DefaultRangeKey.jsx'),
-                                loading: () => {return null}
-                            })
-                        },
-                        {
-                            title: 'Default compareKey',
-                            col: 0,
-                            markdown: () => require('Components/Calendar/Previews/DefaultCompareKey/descripition.md'),
-                            previewCode: () => require('Components/Calendar/Previews/DefaultCompareKey/default-compare-key.md'),
-                            path: Loadable({
-                                loader: () => import('Components/Calendar/Previews/DefaultCompareKey/DefaultCompareKey.jsx'),
-                                loading: () => {return null}
-                            })
-                        },
-                        {
-                            title: 'onApply',
-                            col: 1,
-                            markdown: () => require('Components/Calendar/Previews/Apply/descripition.md'),
-                            previewCode: () => require('Components/Calendar/Previews/Apply/onApply.md'),
-                            path: Loadable({
-                                loader: () => import('Components/Calendar/Previews/Apply/Apply.jsx'),
-                                loading: () => {return null}
-                            })
-                        },
-                        {
-                            title: 'Customize style',
-                            col: 0,
-                            markdown: () => require('Components/Calendar/Previews/Custom/descripition.md'),
-                            previewCode: () => require('Components/Calendar/Previews/Custom/Custom.md'),
-                            path: Loadable({
-                                loader: () => import('Components/Calendar/Previews/Custom/Custom.jsx'),
-                                loading: () => {return null}
-                            })
-                        },
-                        {
-                            title: 'onChange',
-                            col: 1,
-                            markdown: () => require('Components/Calendar/Previews/OnChange/descripition.md'),
-                            previewCode: () => require('Components/Calendar/Previews/OnChange/onchange.md'),
-                            path: Loadable({
-                                loader: () => import('Components/Calendar/Previews/OnChange/OnChange.jsx'),
-                                loading: () => {return null}
-                            })
-                        }
-
                     ]
                 }
             ]

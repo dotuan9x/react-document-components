@@ -11,6 +11,7 @@ import {LayoutContext} from 'Modules/Layouts/layoutContext';
 
 // Components
 import PreviewCode from 'Components/PreviewCode/PreviewCode.jsx';
+import ComponentsOverview from 'Components/ComponentsOverview/index.jsx';
 
 // Utils
 import {random} from 'Src/utils';
@@ -225,6 +226,7 @@ class Components extends Component {
                 result = {
                     ...result,
                     title: component.label || 'Component title',
+                    name: component.name || 'over-view',
                     description: typeof component.description !== 'function' ? component.description || 'This is description of component' : description,
                     spanColExample: component.spanColExample || 24,
                     whenToUse,
@@ -297,7 +299,7 @@ class Components extends Component {
     }
 
     render() {
-        const {title} = this.state.component;
+        const {title, name} = this.state.component;
 
         return (
             <React.Fragment>
@@ -312,28 +314,34 @@ class Components extends Component {
                             this.state.component && this.state.component.description ? typeof this.state.component.description !== 'string' ?
                                 <div className='description-mark-down'>{toReactElement(this.state.component.description)}</div> : <p>{this.state.component.description}</p> : null
                         }
-                        <h2 id='when-to-use'>When To Use</h2>
-                        <Row>
-                            <Col span={24}>
-                                {this.state.component && this.state.component.whenToUse ? toReactElement(this.state.component.whenToUse) : null}
-                            </Col>
-                        </Row>
-                        <h2>Examples</h2>
-                        <Row gutter={[8, 16]}>
-                            {this.showRenderExamples()}
-                        </Row>
-                        {
-                            this.state.component && this.state.component.property ? (
-                                <>
-                                    <h2>Property</h2>
-                                    <Row style={{width: '100%'}}>
-                                        <Col span={24}>
-                                            {this.state.component && this.state.component.property ? toReactElement(this.state.component.property) : null}
-                                        </Col>
-                                    </Row>
-                                </>
-                            ) : null
-                        }
+                        {name === 'over-view' ? (
+                            <ComponentsOverview onClickComponentView={this.props.onClickComponentView} />
+                        ) : (
+                            <>
+                                <h2 id='when-to-use'>When To Use</h2>
+                                <Row>
+                                    <Col span={24}>
+                                        {this.state.component && this.state.component.whenToUse ? toReactElement(this.state.component.whenToUse) : null}
+                                    </Col>
+                                </Row>
+                                <h2>Examples</h2>
+                                <Row gutter={[8, 16]}>
+                                    {this.showRenderExamples()}
+                                </Row>
+                                {
+                                    this.state.component && this.state.component.property ? (
+                                        <>
+                                            <h2>Property</h2>
+                                            <Row style={{width: '100%'}}>
+                                                <Col span={24}>
+                                                    {this.state.component && this.state.component.property ? toReactElement(this.state.component.property) : null}
+                                                </Col>
+                                            </Row>
+                                        </>
+                                    ) : null
+                                }
+                            </>
+                        )}
                     </Spin>
                 </div>
             </React.Fragment>

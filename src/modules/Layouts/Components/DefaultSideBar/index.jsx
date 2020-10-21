@@ -14,7 +14,10 @@ import {LayoutContext} from 'Modules/Layouts/layoutContext';
 import styles from './styles.module.less';
 
 const DefaultSideBar = (props) => {
-    const properties = useContext(LayoutContext);
+    const properties = useContext(LayoutContext).state.layout;
+    const keyComponentSelected = useContext(LayoutContext).state.keyComponentSelected;
+    const {setComponentSelected} = useContext(LayoutContext);
+
     const [menuDataOptions, setMenuDataOptions] = useState([]);
 
     useEffect(() => {
@@ -31,7 +34,8 @@ const DefaultSideBar = (props) => {
                                 if (component.name && component.label) {
                                     arrChildren.push({
                                         name: component.name,
-                                        label: component.label
+                                        label: component.label,
+                                        child: component.child
                                     });
                                 }
                             });
@@ -87,10 +91,23 @@ const DefaultSideBar = (props) => {
     };
 
     const renderMenuElement = (item) => {
-        const {path = '', label = '', name = '', icon = ''} = item;
+        const {path = '', label = '', name = '', icon = '', child = []} = item;
 
         if (label && name) {
-            return (
+            return Array.isArray(child) && child.length ? (
+                <Menu.ItemGroup title={label} key={name}>
+                    {child.map(childItem => (
+                        <Menu.Item
+                            key={childItem.name}
+                        >
+                            <Row type={'flex'} align={'middle'}>
+                                {childItem.icon}
+                                <span>{childItem.label}</span>
+                            </Row>
+                        </Menu.Item>
+                    ))}
+                </Menu.ItemGroup>
+            ) : (
                 <Menu.Item
                     key={name}
                 >
@@ -109,14 +126,12 @@ const DefaultSideBar = (props) => {
     const {collapsed} = props;
 
     const onClickItem = (value) => {
-
-        typeof props.onClickItem === 'function' &&  props.onClickItem(value);
-
+        setComponentSelected(value.key);
     };
 
     return (
         <Sider
-            className="site-layout-background"
+            className={classnames('site-layout-background', styles['sidebar'])}
             theme={'light'}
             trigger={null}
             collapsible
@@ -137,11 +152,13 @@ const DefaultSideBar = (props) => {
                 mode={'inline'}
                 className={classnames({'text-center': collapsed}, {'text-left': !collapsed})}
                 theme={'light'}
-                style={{width: '100%'}}
+                style={{width: '100%', position: 'sticky', top: 0}}
                 onClick={onClickItem}
+                selectedKeys={keyComponentSelected}
                 defaultSelectedKeys={props.defaultSelectedKeys}
                 defaultOpenKeys={props.defaultOpenKeys}
             >
+                <Menu.Item key={'over-view'}>Components Overview</Menu.Item>
                 {renderMenu(menuDataOptions)}
             </Menu>
         </Sider>

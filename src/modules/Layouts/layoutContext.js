@@ -1,5 +1,11 @@
 import React from 'react';
 
-const LayoutContext = React.createContext();
+const initialState = {};
+
+const LayoutContext = React.createContext({
+    state: initialState,
+    setComponentSelected: () => {}
+});
 
 export {LayoutContext};
+
