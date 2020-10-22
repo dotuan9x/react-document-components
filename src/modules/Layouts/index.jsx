@@ -59,8 +59,8 @@ class Layouts extends Component {
 
                 if (selectedComponent.name) {
                     this.setState({
-                        component: selectedComponent,
-                        keyComponentSelected: selectedComponent.name
+                        // component: selectedComponent,
+                        keyComponentSelected: 'over-view'
                     });
                 }
             }
@@ -84,41 +84,45 @@ class Layouts extends Component {
         }
     }
 
-     onChangeComponent = (key) => {
-         let selectedComponent = {};
+    onChangeComponent = (key) => {
+        let selectedComponent = {};
 
-         if (key === 'over-view') {
-             selectedComponent = {
-                 name: 'over-view',
-                 label: 'Components Overview',
-                 description: 'We provides plenty of UI components to enrich your web applications, and we will improve components experience consistently. We also recommand some great Third-Party Libraries additionally.'
-             };
+        if (key === 'over-view') {
+            selectedComponent = {
+                name: 'over-view',
+                label: 'Components Overview',
+                description: 'We provides plenty of UI components to enrich your web applications, and we will improve components experience consistently. We also recommand some great Third-Party Libraries additionally.'
+            };
 
-         } else {
-             this.props.menus && this.props.menus.map(menu => {
-                 if (menu.name && menu.label) {
-                     menu.components.map(component => {
-                         if (component.child && component.child.length) {
-                             component.child.map(childComponent => {
-                                 if (childComponent.name === key) {
-                                     selectedComponent = childComponent;
-                                 }
-                             });
-                         }
-                         if (component.name === key) {
-                             selectedComponent = component;
-                         }
-                     });
-                 }
-             });
-         }
+        } else {
+            this.props.menus && this.props.menus.map(menu => {
+                if (menu.name && menu.label) {
+                    if (menu.components && menu.components.length) {
+                        menu.components.map(component => {
+                            if (component.child && component.child.length) {
+                                component.child.map(childComponent => {
+                                    if (childComponent.name === key) {
+                                        selectedComponent = childComponent;
+                                    }
+                                });
+                            }
+                            if (component.name === key) {
+                                selectedComponent = component;
+                            }
+                        });
+                    } else {
+                        if (menu.name === key) {
+                            selectedComponent = menu;
+                        }
+                    }
+                }
+            });
+        }
 
-         //  setTimeout(() => {
-         this.setState({
-             component: selectedComponent
-         });
-         //  }, 200);
-     }
+        this.setState({
+            component: selectedComponent
+        });
+    }
 
     toggle = () => {
         this.setState({
@@ -174,7 +178,7 @@ class Layouts extends Component {
 
 Layouts.defaultProps = {
     sidebar: {
-        defaultSelectedKeys: ['icon'],
+        defaultSelectedKeys: ['over-view'],
         defaultOpenKeys: ['components']
     },
     menus: [
@@ -191,10 +195,15 @@ Layouts.defaultProps = {
                             name: 'icon',
                             label: 'Icons',
                             spanColExample: 24,
-                            active: true,
                             image: 'https://gw.alipayobjects.com/zos/alicdn/rrwbSt3FQ/Icon.svg',
                             description: () => require('Components/Icon/Docs/description.md'),
                             whenToUse: () => require('Components/Icon/Docs/when-to-use.md'),
+                            changeLog: [
+                                {
+                                    title: '4.7.0',
+                                    content: () => require('Components/Icon/ChangeLog/4.7.0.md')
+                                }
+                            ],
                             examples: [
                                 {
                                     markdown: () => require('Components/Icon/Previews/basic.md'),

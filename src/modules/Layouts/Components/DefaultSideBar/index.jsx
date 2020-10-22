@@ -44,7 +44,7 @@ const DefaultSideBar = (props) => {
                         arrMenus.push({
                             name: menu.name,
                             label: menu.label,
-                            icon: <FileDoneOutlined />,
+                            icon: menu.icon,
                             children: arrChildren
                         });
 

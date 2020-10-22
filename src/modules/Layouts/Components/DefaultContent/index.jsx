@@ -12,6 +12,7 @@ import {LayoutContext} from 'Modules/Layouts/layoutContext';
 // Components
 import PreviewCode from 'Components/PreviewCode/PreviewCode.jsx';
 import ComponentsOverview from 'Components/ComponentsOverview/index.jsx';
+import ChangeLog from 'Components/ChangeLog/index.jsx';
 
 // Utils
 import {random} from 'Src/utils';
@@ -42,6 +43,7 @@ class Components extends Component {
 
             if (this.props.component && this.props.component.name) {
                 this.getComponent(this.props.component).then(component => {
+                    console.log('Components -> componentDidMount -> component', component);
                     this.setState({
                         name: this.props.component.name,
                         component,
@@ -140,6 +142,7 @@ class Components extends Component {
         try {
             let result = {};
             const examples = [];
+            const changeLog = [];
 
             if (component) {
                 if (Array.isArray(component.examples)) {
@@ -189,6 +192,27 @@ class Components extends Component {
                     }
                 }
 
+                if (Array.isArray(component.changeLog)) {
+                    for (const c of component.changeLog) {
+                        let content = null;
+
+                        if (c.content) {
+                            let contentPath = c.content;
+
+                            if (typeof contentPath === 'function') {
+                                contentPath = contentPath();
+                            }
+
+                            content = await this.getMarkdown(contentPath);
+                        }
+
+                        changeLog.push({
+                            title: c.title,
+                            content
+                        });
+                    }
+                }
+
                 let whenToUse = null;
                 let property = null;
                 let description = null;
@@ -231,7 +255,8 @@ class Components extends Component {
                     spanColExample: component.spanColExample || 24,
                     whenToUse,
                     property,
-                    examples
+                    examples,
+                    changeLog
                 };
             }
 
@@ -302,9 +327,9 @@ class Components extends Component {
         try {
             switch (key) {
                 case 'over-view':
-                    
                     return  <ComponentsOverview onClickComponentView={this.props.onClickComponentView} />;
-            
+                case 'change-log':
+                    return <ChangeLog />;
                 default:
                     return (
                         <>
@@ -330,6 +355,8 @@ class Components extends Component {
                                     </>
                                 ) : null
                             }
+                            <h2>Change log</h2>
+                            <ChangeLog changeLog={this.state.component.changeLog} />
                         </>
                     );
             }
