@@ -183,6 +183,12 @@ Layouts.defaultProps = {
     },
     menus: [
         {
+            name: 'change-log',
+            label: 'Change Log',
+            changeLog: () => require('Components/ChangeLog/change-log.md'),
+            description: () => require('Components/ChangeLog/description.md')
+        },
+        {
             'name': 'components',
             'label': 'Components',
             'icon': <FileDoneOutlined />,
@@ -198,12 +204,7 @@ Layouts.defaultProps = {
                             image: 'https://gw.alipayobjects.com/zos/alicdn/rrwbSt3FQ/Icon.svg',
                             description: () => require('Components/Icon/Docs/description.md'),
                             whenToUse: () => require('Components/Icon/Docs/when-to-use.md'),
-                            changeLog: [
-                                {
-                                    title: '4.7.0',
-                                    content: () => require('Components/Icon/ChangeLog/4.7.0.md')
-                                }
-                            ],
+                            changeLog: () => require('Components/Icon/ChangeLog/4.7.0.md'),
                             examples: [
                                 {
                                     markdown: () => require('Components/Icon/Previews/basic.md'),

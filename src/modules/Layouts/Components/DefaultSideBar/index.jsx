@@ -44,7 +44,7 @@ const DefaultSideBar = (props) => {
                         arrMenus.push({
                             name: menu.name,
                             label: menu.label,
-                            icon: menu.icon,
+                            icon: menu.icon !== '' ? menu.icon : <FileDoneOutlined />,
                             children: arrChildren
                         });
 
@@ -91,7 +91,7 @@ const DefaultSideBar = (props) => {
     };
 
     const renderMenuElement = (item) => {
-        const {path = '', label = '', name = '', icon = '', child = []} = item;
+        const {label = '', name = '', icon = '', child = []} = item;
 
         if (label && name) {
             return Array.isArray(child) && child.length ? (
