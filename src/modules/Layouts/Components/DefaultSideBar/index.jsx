@@ -1,5 +1,5 @@
 // Libraries
-import React, {useEffect, useState, useContext} from 'react';
+import React, {useEffect, useState, useContext, useMemo} from 'react';
 import {Layout, Menu, Row} from 'antd';
 import classnames from 'classnames';
 

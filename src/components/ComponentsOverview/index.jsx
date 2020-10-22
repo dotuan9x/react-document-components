@@ -47,28 +47,22 @@ const ComponentsOverview = (props) => {
                         <strong style={{color: 'rgba(0, 0, 0, 0.45)'}}>{component.label} <Tag style={{color: 'rgba(0, 0, 0, 0.45)'}}>{component.child.length}</Tag></strong>
                         <Row gutter={[20, 20]} style={{marginTop: 10}}>
                             {component.child.map(childComponent => {
-                                return (
-                                    <Col key={childComponent.name} onClick={() => onClickOverview(childComponent.name)}>
-                                        <Card className={styles['wrapper-card']} title={childComponent.label} size='small' style={{width: 200}}>
-                                            <div className={styles['card']} >
-                                                <img alt={childComponent.label} width={150}  src={childComponent.image} className={styles['image-background']} />
-                                            </div>
-                                        </Card>
-                                    </Col>
-                                );
+                                if (childComponent.image) {
+                                    return (
+                                        <Col key={childComponent.name} onClick={() => onClickOverview(childComponent.name)}>
+                                            <Card className={styles['wrapper-card']} title={childComponent.label} size='small' style={{width: 200}}>
+                                                <div className={styles['card']} >
+                                                    <img alt={childComponent.label} width={150}  src={childComponent.image} className={styles['image-background']} />
+                                                </div>
+                                            </Card>
+                                        </Col>
+                                    );
+                                }
                             })}
                         </Row>
                     </div>
                 );
-            } else {
-                return (
-                    <Card onClick={() => props.onClickComponentView(component.name)} className={styles['wrapper-card']} key={component.name} title={component.label} size='small' style={{width: 200}}>
-                        <div className={styles['card']} >
-                            <img alt={component.label} width={150}  src={component.image} className={styles['image-background']} />
-                        </div>
-                    </Card>
-                );
-            }
+            } 
         }
     };
 

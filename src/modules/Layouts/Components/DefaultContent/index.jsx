@@ -298,6 +298,46 @@ class Components extends Component {
         }
     }
 
+    showRenderContent = (key) => {
+        try {
+            switch (key) {
+                case 'over-view':
+                    
+                    return  <ComponentsOverview onClickComponentView={this.props.onClickComponentView} />;
+            
+                default:
+                    return (
+                        <>
+                            <h2 id='when-to-use'>When To Use</h2>
+                            <Row>
+                                <Col span={24}>
+                                    {this.state.component && this.state.component.whenToUse ? toReactElement(this.state.component.whenToUse) : null}
+                                </Col>
+                            </Row>
+                            <h2>Examples</h2>
+                            <Row gutter={[8, 16]}>
+                                {this.showRenderExamples()}
+                            </Row>
+                            {
+                                this.state.component && this.state.component.property ? (
+                                    <>
+                                        <h2>Property</h2>
+                                        <Row style={{width: '100%'}}>
+                                            <Col span={24}>
+                                                {this.state.component && this.state.component.property ? toReactElement(this.state.component.property) : null}
+                                            </Col>
+                                        </Row>
+                                    </>
+                                ) : null
+                            }
+                        </>
+                    );
+            }
+        } catch (error) {
+            // Error
+        }
+    }
+
     render() {
         const {title, name} = this.state.component;
 
@@ -314,34 +354,7 @@ class Components extends Component {
                             this.state.component && this.state.component.description ? typeof this.state.component.description !== 'string' ?
                                 <div className='description-mark-down'>{toReactElement(this.state.component.description)}</div> : <p>{this.state.component.description}</p> : null
                         }
-                        {name === 'over-view' ? (
-                            <ComponentsOverview onClickComponentView={this.props.onClickComponentView} />
-                        ) : (
-                            <>
-                                <h2 id='when-to-use'>When To Use</h2>
-                                <Row>
-                                    <Col span={24}>
-                                        {this.state.component && this.state.component.whenToUse ? toReactElement(this.state.component.whenToUse) : null}
-                                    </Col>
-                                </Row>
-                                <h2>Examples</h2>
-                                <Row gutter={[8, 16]}>
-                                    {this.showRenderExamples()}
-                                </Row>
-                                {
-                                    this.state.component && this.state.component.property ? (
-                                        <>
-                                            <h2>Property</h2>
-                                            <Row style={{width: '100%'}}>
-                                                <Col span={24}>
-                                                    {this.state.component && this.state.component.property ? toReactElement(this.state.component.property) : null}
-                                                </Col>
-                                            </Row>
-                                        </>
-                                    ) : null
-                                }
-                            </>
-                        )}
+                        {this.showRenderContent(name)}
                     </Spin>
                 </div>
             </React.Fragment>
