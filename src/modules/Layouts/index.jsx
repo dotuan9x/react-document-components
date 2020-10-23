@@ -53,7 +53,7 @@ class Layouts extends Component {
                                     }
                                 }
                             });
-                        } 
+                        }
                     }
                 });
 
@@ -148,17 +148,20 @@ class Layouts extends Component {
 
         return (
             <React.Fragment>
-                <LayoutContext.Provider 
+                <LayoutContext.Provider
                     value={{state: {layout: this.props, keyComponentSelected: this.state.keyComponentSelected}, setComponentSelected: this.setComponentSelected}}
                 >
                     <Layout style={{minHeight: '100vh'}}>
                         <DefaultSideBar
-                            collapsed={this.state.collapsed} 
-                            defaultOpenKeys={sidebar.defaultOpenKeys} 
-                            defaultSelectedKeys={sidebar.defaultSelectedKeys} 
+                            collapsed={this.state.collapsed}
+                            defaultOpenKeys={sidebar.defaultOpenKeys}
+                            defaultSelectedKeys={sidebar.defaultSelectedKeys}
                         />
                         <Layout className="site-layout">
-                            <Header className="site-layout-background" style={{padding: 0}}>
+                            <Header className="site-layout-background" style={{
+                                padding: 0,
+                                boxShadow: '3px 0 10px 0 rgba(8, 73, 93, 0.3)'
+                            }}>
                                 {React.createElement(this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
                                     className: 'trigger',
                                     onClick: this.toggle
@@ -284,7 +287,7 @@ Layouts.defaultProps = {
                                         loading: () => {return null}
                                     })
                                 }
-        
+
                             ]
                         }
                     ]
