@@ -6,3 +6,38 @@
   justify-content: center;
 }
 
+.sidebar {
+  .menu-sidebar {
+	position: sticky;
+	top: 0;
+    max-height: calc(100vh - 64px);
+    overflow-x: hidden;
+    overflow-y: hidden;
+
+    &:hover {
+      overflow-y: auto;
+    }
+
+        /* width */
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    /* Track */
+    &::-webkit-scrollbar-track {
+      border-radius: 10px;
+      background: #f1f1f1; 
+    }
+    
+    /* Handle */
+    &::-webkit-scrollbar-thumb {
+      border-radius: 10px;
+      background: #888; 
+
+      &:hover {
+        background: #555; 
+
+      }
+    }
+  }
+}
