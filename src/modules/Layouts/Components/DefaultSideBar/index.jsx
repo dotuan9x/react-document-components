@@ -1,17 +1,18 @@
 // Libraries
-import React, {useEffect, useState, useContext, useMemo} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
 import {Layout, Menu, Row} from 'antd';
 import classnames from 'classnames';
 
-import {
-    FileDoneOutlined
-} from '@ant-design/icons';
+import {FileDoneOutlined} from '@ant-design/icons';
 
 // Context
 import {LayoutContext} from 'Modules/Layouts/layoutContext';
 
 // Assets
 import styles from './styles.module.less';
+import {handleError} from 'Src/utils';
+
+const PATH = 'Modules/Layouts/Components/DefaultSideBar/index.jsx';
 
 const DefaultSideBar = (props) => {
     const properties = useContext(LayoutContext).state.layout;
@@ -56,70 +57,84 @@ const DefaultSideBar = (props) => {
                 }
             }
         } catch (error) {
-            //
+            handleError(error, {
+                path: PATH
+            });
         }
     }, [properties]);
 
     const renderMenu = (menu) => {
-        if (menu) {
-            return menu.map(item => {
-                const {label = '', name = '', icon = '', children = []} = item;
+        try {
+            if (menu) {
+                return menu.map(item => {
+                    const {label = '', name = '', icon = '', children = []} = item;
 
-                if (name) {
-                    if (children.length) {
-                        return (
-                            <Menu.SubMenu
-                                key={name}
-                                title={
-                                    <Row type={'flex'} align={'middle'}>
-                                        {icon}
-                                        <span>{label}</span>
-                                    </Row>
-                                }
-                            >
-                                {renderMenu(children)}
-                            </Menu.SubMenu>
-                        );
-                    } else {
-                        return renderMenuElement(item);
+                    if (name) {
+                        if (children.length) {
+                            return (
+                                <Menu.SubMenu
+                                    key={name}
+                                    title={
+                                        <Row type={'flex'} align={'middle'}>
+                                            {icon}
+                                            <span>{label}</span>
+                                        </Row>
+                                    }
+                                >
+                                    {renderMenu(children)}
+                                </Menu.SubMenu>
+                            );
+                        } else {
+                            return renderMenuElement(item);
+                        }
                     }
-                }
+                });
+            }
+
+            return null;
+        } catch (error) {
+            handleError(error, {
+                path: PATH
             });
         }
-
-        return null;
     };
 
     const renderMenuElement = (item) => {
-        const {label = '', name = '', icon = '', child = []} = item;
+        try {
+            const {label = '', name = '', icon = '', child = []} = item;
 
-        if (label && name) {
-            return Array.isArray(child) && child.length ? (
-                <Menu.ItemGroup title={label} key={name}>
-                    {child.map(childItem => (
-                        <Menu.Item
-                            key={childItem.name}
-                        >
-                            <Row type={'flex'} align={'middle'}>
-                                {childItem.icon}
-                                <span>{childItem.label}</span>
-                            </Row>
-                        </Menu.Item>
-                    ))}
-                </Menu.ItemGroup>
-            ) : (
-                <Menu.Item
-                    key={name}
-                >
-                    <Row type={'flex'} align={'middle'}>
-                        {icon}
-                        <span>{label}</span>
-                    </Row>
-                </Menu.Item>
-            );
+            if (label && name) {
+                return Array.isArray(child) && child.length ? (
+                    <Menu.ItemGroup title={label} key={name}>
+                        {child.map(childItem => (
+                            <Menu.Item
+                                key={childItem.name}
+                            >
+                                <Row type={'flex'} align={'middle'}>
+                                    {childItem.icon}
+                                    <span>{childItem.label}</span>
+                                </Row>
+                            </Menu.Item>
+                        ))}
+                    </Menu.ItemGroup>
+                ) : (
+                    <Menu.Item
+                        key={name}
+                    >
+                        <Row type={'flex'} align={'middle'}>
+                            {icon}
+                            <span>{label}</span>
+                        </Row>
+                    </Menu.Item>
+                );
+            }
+
+            return null;
+        } catch (error) {
+            handleError(error, {
+                path: PATH
+            });
         }
-
-        return null;
     };
 
     const {Sider} = Layout;

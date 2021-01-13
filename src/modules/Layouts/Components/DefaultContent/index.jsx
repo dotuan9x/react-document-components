@@ -15,12 +15,13 @@ import ComponentsOverview from 'Components/ComponentsOverview/index.jsx';
 import ChangeLog from 'Components/ChangeLog/index.jsx';
 
 // Utils
-import {random} from 'Src/utils';
+import {random, handleError} from 'Src/utils';
 
 // Assets
 import 'highlight.js/styles/tomorrow.css';
 import './style.less';
-// import '@antscorp/components/main.css';
+
+const PATH = 'Modules/Layouts/Components/DefaultContent/index.jsx';
 
 class Components extends Component {
     static contextType = LayoutContext;
@@ -52,7 +53,9 @@ class Components extends Component {
             }
 
         } catch (error) {
-            // Error
+            handleError(error, {
+                path: PATH
+            });
         }
     }
 
@@ -75,7 +78,9 @@ class Components extends Component {
                 });
             }
         } catch (error) {
-            // Error
+            handleError(error, {
+                path: PATH
+            });
         }
     }
 
@@ -133,7 +138,9 @@ class Components extends Component {
                     return removeMeaningless(removeParent);
                 });
         } catch (error) {
-            // Error
+            handleError(error, {
+                path: PATH
+            });
         }
     }
 
@@ -250,7 +257,9 @@ class Components extends Component {
 
             return result;
         } catch (error) {
-            // Error
+            handleError(error, {
+                path: PATH
+            });
         }
     }
 
@@ -307,7 +316,9 @@ class Components extends Component {
                 return newExamples;
             }
         } catch (error) {
-            // Error
+            handleError(error, {
+                path: PATH
+            });
         }
     }
 
@@ -355,7 +366,9 @@ class Components extends Component {
                     );
             }
         } catch (error) {
-            // Error
+            handleError(error, {
+                path: PATH
+            });
         }
     }
 

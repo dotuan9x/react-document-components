@@ -2,17 +2,20 @@
 import React, {useState, useRef} from 'react';
 import {Row, Tooltip, Tabs} from 'antd';
 import PropTypes from 'prop-types';
+import {CopyOutlined, CheckOutlined} from '@ant-design/icons';
+
+const {TabPane} = Tabs;
 
 // Components
 import Highlighter from 'Src/components/Highlighter';
 
-// Icons
-import {CopyOutlined, CheckOutlined} from '@ant-design/icons';
-
 // Styles
 import styles from './styles.module.less';
 
-const {TabPane} = Tabs;
+// Utils
+import {handleError} from 'Src/utils';
+
+const PATH = 'Components/PreviewCode/PreviewCode.jsx';
 
 function PreviewCode(props) {
     // State
@@ -24,12 +27,9 @@ function PreviewCode(props) {
         try {
             setShowCode(!isShowCode);
         } catch (error) {
-            if (typeof props.onError === 'function') {
-                props.onError(error, {
-                    action: 'onClickExpandCode',
-                    args: {}
-                });
-            }
+            handleError(error, {
+                path: PATH
+            });
         }
     };
 
@@ -38,7 +38,7 @@ function PreviewCode(props) {
             const copyCode = document.createElement('textarea');
 
             copyCode.innerHTML = codeRef.current.textContent;
-        
+
             document.body.appendChild(copyCode);
 
             copyCode.select();
@@ -53,12 +53,9 @@ function PreviewCode(props) {
 
             copyCode.remove();
         } catch (error) {
-            if (typeof props.onError === 'function') {
-                props.onError(error, {
-                    action: 'onClickCopy',
-                    args: {}
-                });
-            }
+            handleError(error, {
+                path: PATH
+            });
         }
     };
 
@@ -66,19 +63,19 @@ function PreviewCode(props) {
         <>
             <Row >
                 <div className={styles['preview-code']}>
-                    <Tooltip title={isCopy ? 'Copied!' : 'Copy code'}> 
+                    <Tooltip title={isCopy ? 'Copied!' : 'Copy code'}>
                         {isCopy ? <CheckOutlined style={{color: '#52c41a'}} className={styles['expand-icon']} /> : <CopyOutlined onClick={onClickCopy} className={styles['expand-icon']} />}
                     </Tooltip>
                     <Tooltip title={isShowCode ? 'Hide code' : 'Show code'}>
                         <i
                             onClick={onClickExpandCode}
-                            className={`${styles['expand-icon']} ${isShowCode ? 'icon-document-expand-icon-hide' : 'icon-document-expand-icon-show'}`} 
+                            className={`${styles['expand-icon']} ${isShowCode ? 'icon-document-expand-icon-hide' : 'icon-document-expand-icon-show'}`}
                         />
                     </Tooltip>
                 </div>
             </Row>
             <Row>
-                <div 
+                <div
                     className='highlight-code'
                     ref={codeRef}
                     style={{
@@ -90,7 +87,7 @@ function PreviewCode(props) {
                             <TabPane tab="JavaScript" key="1">
                                 {props.code}
                             </TabPane>
-                            {props.styles ? 
+                            {props.styles ?
                                 <TabPane tab="Css" key="2">
                                     <Highlighter>
                                         {props.styles}

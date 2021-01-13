@@ -13,10 +13,15 @@ import {
 import DefaultSideBar from './Components/DefaultSideBar';
 import DefaultContent from 'Modules/Layouts/Components/DefaultContent';
 
+// Utils
+import {handleError} from 'Src/utils';
+
 // Assets
 import 'Assets/css/styles.less';
 
 import {LayoutContext} from './layoutContext';
+
+const PATH = 'Modules/Layouts/index.jsx';
 
 class Layouts extends Component {
     constructor(props) {
@@ -66,9 +71,9 @@ class Layouts extends Component {
             }
 
         } catch (error) {
-            if (this.props.onError && typeof this.props.onError === 'function') {
-                this.props.onError(error);
-            }
+            handleError(error, {
+                path: PATH
+            });
         }
     }
 
@@ -78,50 +83,57 @@ class Layouts extends Component {
                 this.onChangeComponent(this.state.keyComponentSelected);
             }
         } catch (error) {
-            if (this.props.onError && typeof this.props.onError === 'function') {
-                this.props.onError(error);
-            }
+            handleError(error, {
+                path: PATH
+            });
         }
     }
 
     onChangeComponent = (key) => {
-        let selectedComponent = {};
+        try {
 
-        if (key === 'over-view') {
-            selectedComponent = {
-                name: 'over-view',
-                label: 'Components Overview',
-                description: 'We provides plenty of UI components to enrich your web applications, and we will improve components experience consistently. We also recommand some great Third-Party Libraries additionally.'
-            };
+            let selectedComponent = {};
 
-        } else {
-            this.props.menus && this.props.menus.map(menu => {
-                if (menu.name && menu.label) {
-                    if (menu.components && menu.components.length) {
-                        menu.components.map(component => {
-                            if (component.child && component.child.length) {
-                                component.child.map(childComponent => {
-                                    if (childComponent.name === key) {
-                                        selectedComponent = childComponent;
-                                    }
-                                });
+            if (key === 'over-view') {
+                selectedComponent = {
+                    name: 'over-view',
+                    label: 'Components Overview',
+                    description: 'We provides plenty of UI components to enrich your web applications, and we will improve components experience consistently. We also recommand some great Third-Party Libraries additionally.'
+                };
+
+            } else {
+                this.props.menus && this.props.menus.map(menu => {
+                    if (menu.name && menu.label) {
+                        if (menu.components && menu.components.length) {
+                            menu.components.map(component => {
+                                if (component.child && component.child.length) {
+                                    component.child.map(childComponent => {
+                                        if (childComponent.name === key) {
+                                            selectedComponent = childComponent;
+                                        }
+                                    });
+                                }
+                                if (component.name === key) {
+                                    selectedComponent = component;
+                                }
+                            });
+                        } else {
+                            if (menu.name === key) {
+                                selectedComponent = menu;
                             }
-                            if (component.name === key) {
-                                selectedComponent = component;
-                            }
-                        });
-                    } else {
-                        if (menu.name === key) {
-                            selectedComponent = menu;
                         }
                     }
-                }
+                });
+            }
+
+            this.setState({
+                component: selectedComponent
+            });
+        } catch (error) {
+            handleError(error, {
+                path: PATH
             });
         }
-
-        this.setState({
-            component: selectedComponent
-        });
     }
 
     toggle = () => {
@@ -136,9 +148,9 @@ class Layouts extends Component {
                 keyComponentSelected: key
             });
         } catch (error) {
-            if (this.props.onError && typeof this.props.onError === 'function') {
-                this.props.onError(error);
-            }
+            handleError(error, {
+                path: PATH
+            });
         }
     }
 

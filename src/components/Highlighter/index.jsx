@@ -14,9 +14,7 @@ export class Highlighter extends React.PureComponent {
         let {children} = this.props;
 
         return (
-            <div
-                ref={(node) => this.node = node}
-            >
+            <div ref={(node) => this.node = node}>
                 {children}
             </div>
         );
